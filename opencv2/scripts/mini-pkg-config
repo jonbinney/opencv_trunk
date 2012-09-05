@@ -14,7 +14,7 @@ Re-running on its own output *should* produce identical results.
 """
 from string import Template
 from StringIO import StringIO
-import sys
+import sys, os.path, re
 
 
 class PkgConfig:
@@ -148,5 +148,21 @@ pc = PkgConfig(pc_lines)
 if output_type == '--cflags':
   print pc['Cflags']
 elif output_type == '--libs':
-  print pc['Libs']
+  # opencv returns just a list of absolute paths to libraries. we instead
+  # want a libary directory (-L ...) and a bunch of library names (-l ...)
+  lib_dir_set = set()
+  lib_names = []
+  for lib_path in pc['Libs'].split():
+    lib_dir, lib_filename = os.path.split(lib_path)
+    lib_dir_set.add(lib_dir)
+    m = re.match(r'lib(.+).so', lib_filename)
+    if m:
+      lib_name = m.groups()[0]
+    else:
+      raise Exception('Invalid library filename %s' % lib_filename)
+    lib_names.append(lib_name)
+  for lib_dir in lib_dir_set:
+    sys.stdout.write('-L%s ' % lib_dir)
+  for lib_name in lib_names:
+    sys.stdout.write('-l%s ' % lib_name)
     

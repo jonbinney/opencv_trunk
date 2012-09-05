@@ -20,7 +20,7 @@ Image messages and OpenCV images.
 <review status="3rdparty" notes=""/>
 <url>http://opencv.willowgarage.com</url>
 <export>
-  <cpp cflags="`scripts/mini-pkg-config ./install/lib/pkgconfig/opencv.pc --cflags`" lflags="`scripts/mini-pkg-config opencv.pc ./install/lib/pkgconfig/opencv.pc --libs`"/>
+  <cpp cflags="`${prefix}/scripts/mini-pkg-config ${prefix}/install/lib/pkgconfig/opencv.pc --cflags`" lflags="`${prefix}/scripts/mini-pkg-config ${prefix}/install/lib/pkgconfig/opencv.pc --libs`"/>
 </export>
 <versioncontrol type="svn" url="https://code.ros.org/svn/opencv"/>
 
